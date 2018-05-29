@@ -1,5 +1,5 @@
 package comunications;
 
 public enum Request {
-	WORDS, TIME, FILE
+	ALERT_WITH_TEXT, ALERT;
 }

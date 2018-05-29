@@ -1,5 +1,6 @@
 package comunications;
 
 public enum Response {
-	WORDS, TIME, FILE
+
+	ALERT_WITH_TEXT, ALERT;
 }

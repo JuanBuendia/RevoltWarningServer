@@ -1,19 +1,19 @@
 package comunications;
 
+import java.net.Socket;
+import java.io.IOException;
+import java.time.LocalTime;
+import java.util.logging.Level;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.Socket;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.logging.Level;
 
 public class ThreadSocket extends Thread {
 
+	private boolean stop;
 	private Socket connection;
 	private DataInputStream input;
 	private DataOutputStream output;
-	private boolean stop;
 
 	public ThreadSocket(Socket socket) throws IOException {
 		this.connection = socket;
@@ -40,14 +40,11 @@ public class ThreadSocket extends Thread {
 	private void manageRequest(String request) throws IOException {
 		Server.LOGGER.log(Level.INFO, "Request: " + connection.getInetAddress().getHostAddress() + " - " + request);
 		switch (Request.valueOf(request)) {
-		case WORDS:
-			responseWordsService();
+		case ALERT:
+			responseAlertService();
 			break;
-		case TIME:
-			responseTimeService();
-			break;
-		case FILE:
-			responseFileService();
+		case ALERT_WITH_TEXT:
+			responseAlertWithTextService();
 			break;
 		default:
 			break;
@@ -55,17 +52,14 @@ public class ThreadSocket extends Thread {
 		Server.LOGGER.log(Level.INFO, "Conexion con: " + connection.getInetAddress().getHostAddress() + " cerrada.");
 	}
 
-	private void responseFileService() {
-		// TODO Auto-generated method stub
-	}
-
-	private void responseTimeService() throws IOException {
-		output.writeUTF(Response.TIME.toString());
+	private void responseAlertWithTextService() throws IOException {
+		output.writeUTF(Response.ALERT_WITH_TEXT.toString());
+		output.writeUTF(input.readUTF());
 		output.writeUTF(LocalTime.now().format(DateTimeFormatter.ISO_TIME));
 	}
 
-	private void responseWordsService() throws IOException {
-		output.writeUTF(Response.WORDS.toString());
-		output.writeUTF("Hola mundo");
+	private void responseAlertService() throws IOException {
+		output.writeUTF(Response.ALERT.toString());
+		output.writeUTF(LocalTime.now().format(DateTimeFormatter.ISO_TIME));
 	}
 }

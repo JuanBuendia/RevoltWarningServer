@@ -1,26 +1,26 @@
 package comunications;
 
-import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Server extends Thread {
 
-	private ServerSocket server;
 	private int port;
 	private boolean stop;
-	public final static Logger LOGGER = Logger.getGlobal();
+	private ServerSocket server;
 	private ArrayList<ThreadSocket> connections;
+	public final static Logger LOGGER = Logger.getGlobal();
 
 	public Server(int port) throws IOException {
-		connections = new ArrayList<>();
-		this.port = port;
-		server = new ServerSocket(port);
-		start();
 		LOGGER.log(Level.INFO, "Servidor inicado en puerto: " + this.port);
+		connections = new ArrayList<>();
+		server = new ServerSocket(port);
+		this.port = port;
+		start();
 	}
 
 	@Override
